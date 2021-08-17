@@ -40,7 +40,7 @@ steps:
     action: 'Run a Docker Compose command'
     dockerComposeCommand: 'build'
 
-- task: DockerCompose@1
+- task: DockerCompose@0
   inputs:
     containerregistrytype: 'Azure Container Registry'
     azureSubscription: 'Microsoft Azure Enterprise (83cc3e46-0000-4be1-a33f-f757490dcebc)'
