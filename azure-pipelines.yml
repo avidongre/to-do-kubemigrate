@@ -10,14 +10,6 @@ pool:
       name: MyHostedVM
 
 steps:
-- task: DockerCompose@0
-  inputs:
-    containerregistrytype: 'Azure Container Registry'
-    azureSubscription: 'Microsoft Azure Enterprise (83cc3e46-0000-4be1-a33f-f757490dcebc)'
-    azureContainerRegistry: '{"loginServer":"infykubedemo.azurecr.io", "id" : "/subscriptions/83cc3e46-0000-4be1-a33f-f757490dcebc/resourceGroups/InfyKubeDemo/providers/Microsoft.ContainerRegistry/registries/infykubedemo"}'
-    dockerComposeFile: 'docker-compose.yaml'
-    action: 'Run a Docker Compose command'
-    dockerComposeCommand: 'build'
 
 - script: |
     echo Sample script
@@ -32,11 +24,21 @@ steps:
     SecretsFilter: '*'
     RunAsPreJob: true
 
+
+
 - script: |
     echo $(AKV-TODO-DB-ROOT-PASS) $(AKV-TODO-DB-USER) $(AKV-TODO-DB-PASS) $(AKV-TODO-DB-NAME)
     echo See https://aka.ms/yaml
 
-
+- task: DockerCompose@0
+  inputs:
+    containerregistrytype: 'Azure Container Registry'
+    azureSubscription: 'Microsoft Azure Enterprise (83cc3e46-0000-4be1-a33f-f757490dcebc)'
+    azureContainerRegistry: '{"loginServer":"infykubedemo.azurecr.io", "id" : "/subscriptions/83cc3e46-0000-4be1-a33f-f757490dcebc/resourceGroups/InfyKubeDemo/providers/Microsoft.ContainerRegistry/registries/infykubedemo"}'
+    dockerComposeFile: '**/docker-compose.yml'
+    dockerComposeFileArgs: 'TAG=$(TAG)'
+    action: 'Run a Docker Compose command'
+    dockerComposeCommand: 'build'
 
 - task: HelmDeploy@0
   continueOnError: true
