@@ -25,6 +25,7 @@ steps:
 
 
 - task: AzureKeyVault@2
+  
   inputs:
     azureSubscription: 'ServicePrincipalForKeyVault'
     KeyVaultName: 'kube-migrate-creds'
@@ -36,6 +37,7 @@ steps:
     echo See https://aka.ms/yaml
 - task: HelmDeploy@0
   continueOnError: true
+  enabled: false
   inputs:
     connectionType: 'Kubernetes Service Connection'
     kubernetesServiceConnection: 'KubeMigrateServiceConnection'
@@ -47,6 +49,7 @@ steps:
     arguments: '--set mongodbRootPassword=$(DB_ROOT_PASS) --set mongodbUsername=$(DB_USER) --set mongodbPassword=$(DB_PASS) --set mongodbDatabase=$(DB_NAME) --set externalAccess.enabled=false --set replicaSet.enabled=true --set auth.username=$(DB_USER) --set auth.password=$(DB_PASS) --set auth.database=$(DB_NAME)'
 
 - task: HelmDeploy@0
+  enabled: false
   continueOnError: true
   inputs:
      connectionType: 'Kubernetes Service Connection'
