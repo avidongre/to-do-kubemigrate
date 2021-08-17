@@ -40,6 +40,10 @@ steps:
     action: 'Run a Docker Compose command'
     dockerComposeCommand: 'build'
 
+- script: |
+    echo docker images
+    echo See https://aka.ms/yaml
+
 - task: HelmDeploy@0
   continueOnError: true
   enabled: false
