@@ -30,7 +30,7 @@ steps:
     echo $(AKV-TODO-DB-ROOT-PASS) $(AKV-TODO-DB-USER) $(AKV-TODO-DB-PASS) $(AKV-TODO-DB-NAME)
     echo See https://aka.ms/yaml
 
-- task: DockerCompose@0
+- task: DockerCompose@build
   inputs:
     containerregistrytype: 'Azure Container Registry'
     azureSubscription: 'Microsoft Azure Enterprise (83cc3e46-0000-4be1-a33f-f757490dcebc)'
@@ -40,9 +40,33 @@ steps:
     action: 'Run a Docker Compose command'
     dockerComposeCommand: 'build'
 
+- task: DockerCompose@push
+  inputs:
+    containerregistrytype: 'Azure Container Registry'
+    azureSubscription: 'Microsoft Azure Enterprise (83cc3e46-0000-4be1-a33f-f757490dcebc)'
+    azureContainerRegistry: '{"loginServer":"infykubedemo.azurecr.io", "id" : "/subscriptions/83cc3e46-0000-4be1-a33f-f757490dcebc/resourceGroups/InfyKubeDemo/providers/Microsoft.ContainerRegistry/registries/infykubedemo"}'
+    dockerComposeFile: '**/docker-compose.yaml'
+    dockerComposeFileArgs: 'TAG=$(TAG)'
+    action: 'Run a Docker Compose command'
+    dockerComposeCommand: 'push'
+
+
 - script: |
     echo docker images
     echo See https://aka.ms/yaml
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'helm-charts'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'helmartifact'
+    publishLocation: 'Container'
 
 - task: HelmDeploy@0
   continueOnError: true
