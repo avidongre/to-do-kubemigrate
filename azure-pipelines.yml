@@ -24,6 +24,16 @@ steps:
     echo See https://aka.ms/yaml
 
 
+- task: AzureKeyVault@2
+  inputs:
+    azureSubscription: 'ServicePrincipalForKeyVault'
+    KeyVaultName: 'kube-migrate-creds'
+    SecretsFilter: 'AKV-TODO*'
+    RunAsPreJob: false
+
+- script: |
+    echo $(AKV-TODO-DB-ROOT-PASS) $(AKV-TODO-DB-USER) $(AKV-TODO-DB-PASS) $(AKV-TODO-DB-NAME)
+    echo See https://aka.ms/yaml
 - task: HelmDeploy@0
   continueOnError: true
   inputs:
