@@ -30,7 +30,7 @@ steps:
     azureSubscription: 'ServicePrincipalForKeyVault'
     KeyVaultName: 'kube-migrate-creds'
     SecretsFilter: '*'
-    RunAsPreJob: false
+    RunAsPreJob: true
 
 - script: |
     echo $(AKV-TODO-DB-ROOT-PASS) $(AKV-TODO-DB-USER) $(AKV-TODO-DB-PASS) $(AKV-TODO-DB-NAME)
