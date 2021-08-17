@@ -66,33 +66,3 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'helmartifact'
     publishLocation: 'Container'
-
-- task: HelmDeploy@0
-  continueOnError: true
-  enabled: false
-  inputs:
-    connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceConnection: 'KubeMigrateServiceConnection'
-    namespace: 'default'
-    command: 'install'
-    chartType: 'Name'
-    chartName: 'bitnami/mongodb'
-    releaseName: 'mongodb'
-    arguments: '--set mongodbRootPassword=$(DB_ROOT_PASS) --set mongodbUsername=$(DB_USER) --set mongodbPassword=$(DB_PASS) --set mongodbDatabase=$(DB_NAME) --set externalAccess.enabled=false --set replicaSet.enabled=true --set auth.username=$(DB_USER) --set auth.password=$(DB_PASS) --set auth.database=$(DB_NAME)'
-
-- task: HelmDeploy@0
-  enabled: false
-  continueOnError: true
-  inputs:
-     connectionType: 'Kubernetes Service Connection'
-     kubernetesServiceConnection: 'KubeMigrateServiceConnection'
-     namespace: 'default'
-     command: 'install'
-     chartType: 'FilePath'
-     chartPath: 'helm-charts/to-do-api'
-     releaseName: 'sample-app-go'
-     valueFile: 'helm-charts/to-do-api/values.yaml'
-     arguments: '--set DB_CONNECTION=$(DB_CONNECTION) --set DB_NAME=$(DB_NAME) --set image.repository=$(IMAGE_REPOSITORY_API) --set ingress.hosts[0].host=$(KUBE_MIGRATE_HOSTNAME)'
-
-
-
