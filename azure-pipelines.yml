@@ -24,12 +24,6 @@ steps:
     SecretsFilter: '*'
     RunAsPreJob: true
 
-
-
-- script: |
-    echo $(AKV-TODO-DB-ROOT-PASS) $(AKV-TODO-DB-USER) $(AKV-TODO-DB-PASS) $(AKV-TODO-DB-NAME)
-    echo See https://aka.ms/yaml
-
 - task: DockerCompose@0
   inputs:
     containerregistrytype: 'Azure Container Registry'
@@ -41,13 +35,19 @@ steps:
     dockerComposeCommand: 'build'
 
 - task: CmdLine@2
-  displayName: Trivy Scanning
+  displayName: Trivy Scanning for API
   inputs:
     script:       
+      echo 'checking for HIGH , CRITICAL for API'
       trivy image --exit-code 0 --severity HIGH,CRITICAL $(REGISTRY_NAME)/$(IMAGE_REPOSITORY_API):$(TAG)      
-      echo 'checking for HIGH , CRITICAL'
+ 
+- task: CmdLine@2
+  displayName: Trivy Scanning for FE
+  inputs:
+    script:       
+      echo 'checking for HIGH , CRITICAL for FE'
       trivy image --exit-code 0 --severity HIGH,CRITICAL $(REGISTRY_NAME)/$(IMAGE_REPOSITORY_CLIENT):$(TAG)
-      
+
 - task: DockerCompose@0
   inputs:
     containerregistrytype: 'Azure Container Registry'
