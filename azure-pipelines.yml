@@ -11,11 +11,6 @@ pool:
 
 steps:
 
-- script: |
-    echo Sample script
-    echo See https://aka.ms/yaml
-
-
 - task: AzureKeyVault@2
   
   inputs:
@@ -39,14 +34,14 @@ steps:
   inputs:
     script:       
       #echo 'checking for HIGH , CRITICAL for API'
-      trivy image --exit-code 0  $(REGISTRY_NAME)/$(IMAGE_REPOSITORY_API):$(TAG)      
+      trivy image --exit-code 0  --severity HIGH,CRITICAL $(IMAGE_REPOSITORY_API):$(TAG)      
  
 - task: CmdLine@2
   displayName: Trivy Scanning for FE
   inputs:
     script:       
       #echo 'checking for HIGH , CRITICAL for FE'
-      trivy image --exit-code 0  $(REGISTRY_NAME)/$(IMAGE_REPOSITORY_CLIENT):$(TAG)
+      trivy image --exit-code 0  --severity HIGH,CRITICAL $(IMAGE_REPOSITORY_CLIENT):$(TAG)
 
 - task: DockerCompose@0
   inputs:
