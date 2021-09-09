@@ -40,6 +40,14 @@ steps:
     action: 'Run a Docker Compose command'
     dockerComposeCommand: 'build'
 
+- task: CmdLine@2
+  displayName: Trivy Scanning
+  inputs:
+    script:       
+      trivy image --exit-code 0 --severity HIGH,CRITICAL $(REGISTRY_NAME)/$(IMAGE_REPOSITORY_API):$(TAG)      
+      echo 'checking for HIGH , CRITICAL'
+      trivy image --exit-code 0 --severity HIGH,CRITICAL $(REGISTRY_NAME)/$(IMAGE_REPOSITORY_CLIENT):$(TAG)
+      
 - task: DockerCompose@0
   inputs:
     containerregistrytype: 'Azure Container Registry'
@@ -49,6 +57,7 @@ steps:
     dockerComposeFileArgs: 'TAG=$(TAG)'
     action: 'Run a Docker Compose command'
     dockerComposeCommand: 'push'
+
 
 - script: |
     echo docker images
