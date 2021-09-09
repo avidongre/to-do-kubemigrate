@@ -38,14 +38,14 @@ steps:
   displayName: Trivy Scanning for API
   inputs:
     script:       
-      echo 'checking for HIGH , CRITICAL for API'
+      #echo 'checking for HIGH , CRITICAL for API'
       trivy image --exit-code 0  $(REGISTRY_NAME)/$(IMAGE_REPOSITORY_API):$(TAG)      
  
 - task: CmdLine@2
   displayName: Trivy Scanning for FE
   inputs:
     script:       
-      echo 'checking for HIGH , CRITICAL for FE'
+      #echo 'checking for HIGH , CRITICAL for FE'
       trivy image --exit-code 0  $(REGISTRY_NAME)/$(IMAGE_REPOSITORY_CLIENT):$(TAG)
 
 - task: DockerCompose@0
