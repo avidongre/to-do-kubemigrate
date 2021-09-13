@@ -5,6 +5,13 @@ metadata:
   labels:
     {{- include "to-do-api.labels" . | nindent 4 }}
 spec:
+  strategy:
+    type: {{ .Values.DeploymentUpdate.type }}
+    {{- if eq .Values.DeploymentUpdate.type "RollingUpdate" }}
+    rollingUpdate:
+      maxSurge: {{ .Values.DeploymentUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.DeploymentUpdate.maxUnavailable }}
+    {{- end}}
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
